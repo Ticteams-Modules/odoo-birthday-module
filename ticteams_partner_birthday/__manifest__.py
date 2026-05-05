@@ -79,7 +79,7 @@ Odoo 18.0.
     # ------------------------------------------------------------------
     "assets": {
         "web.assets_backend": [
-            "partner_birthday/static/src/scss/user_birthday.scss",
+            "ticteams_ticteams_partner_birthday/static/src/scss/user_birthday.scss",
         ],
     },
 

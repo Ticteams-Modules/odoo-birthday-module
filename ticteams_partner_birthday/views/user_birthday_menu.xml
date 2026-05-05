@@ -2,27 +2,27 @@
 <odoo>
 
     <!-- Top-level application menu -->
-    <menuitem id="menu_partner_birthday_root"
+    <menuitem id="menu_ticteams_partner_birthday_root"
               name="Cumpleaños"
-              web_icon="partner_birthday,static/description/icon.png"
+              web_icon="ticteams_partner_birthday,static/description/icon.png"
               sequence="100"/>
 
     <!-- Birthday list menu -->
-    <menuitem id="menu_partner_birthday_list"
+    <menuitem id="menu_ticteams_partner_birthday_list"
               name="Próximos cumpleaños"
-              parent="menu_partner_birthday_root"
-              action="action_partner_birthday"
+              parent="menu_ticteams_partner_birthday_root"
+              action="action_ticteams_partner_birthday"
               sequence="10"/>
 
     <!-- Configuration submenu (link to standard contacts) -->
-    <menuitem id="menu_partner_birthday_configuration"
+    <menuitem id="menu_ticteams_partner_birthday_configuration"
               name="Configuración"
-              parent="menu_partner_birthday_root"
+              parent="menu_ticteams_partner_birthday_root"
               sequence="90"/>
 
-    <menuitem id="menu_partner_birthday_contacts"
+    <menuitem id="menu_ticteams_partner_birthday_contacts"
               name="Contactos"
-              parent="menu_partner_birthday_configuration"
+              parent="menu_ticteams_partner_birthday_configuration"
               action="contacts.action_contacts"
               sequence="10"/>
 

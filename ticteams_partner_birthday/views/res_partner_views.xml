@@ -37,7 +37,7 @@
     </record>
 
     <!-- Dedicated list view sorted by upcoming birthday -->
-    <record id="view_partner_birthday_tree" model="ir.ui.view">
+    <record id="view_ticteams_partner_birthday_tree" model="ir.ui.view">
         <field name="name">res.partner.birthday.list</field>
         <field name="model">res.partner</field>
         <field name="arch" type="xml">
@@ -61,12 +61,12 @@
     </record>
 
     <!-- Kanban view: birthday cards -->
-    <record id="view_partner_birthday_kanban" model="ir.ui.view">
+    <record id="view_ticteams_partner_birthday_kanban" model="ir.ui.view">
         <field name="name">res.partner.birthday.kanban</field>
         <field name="model">res.partner</field>
         <field name="arch" type="xml">
             <kanban default_order="days_to_birthday asc"
-                    class="o_partner_birthday_kanban">
+                    class="o_ticteams_partner_birthday_kanban">
                 <field name="id"/>
                 <field name="name"/>
                 <field name="birthday"/>
@@ -77,7 +77,7 @@
                 <field name="image_128"/>
                 <templates>
                     <t t-name="card">
-                        <div t-attf-class="oe_kanban_card oe_kanban_global_click o_partner_birthday_card #{record.is_birthday_today.raw_value ? 'o_birthday_today' : ''}">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click o_ticteams_partner_birthday_card #{record.is_birthday_today.raw_value ? 'o_birthday_today' : ''}">
                             <div class="o_kanban_image">
                                 <img t-attf-src="/web/image/res.partner/#{record.id.raw_value}/image_128"
                                      class="o_image_64_cover" alt="Avatar"/>
@@ -111,7 +111,7 @@
     </record>
 
     <!-- Search view with filters and groupings -->
-    <record id="view_partner_birthday_search" model="ir.ui.view">
+    <record id="view_ticteams_partner_birthday_search" model="ir.ui.view">
         <field name="name">res.partner.birthday.search</field>
         <field name="model">res.partner</field>
         <field name="arch" type="xml">
@@ -140,11 +140,11 @@
     </record>
 
     <!-- Action: Contact Birthdays -->
-    <record id="action_partner_birthday" model="ir.actions.act_window">
+    <record id="action_ticteams_partner_birthday" model="ir.actions.act_window">
         <field name="name">Cumpleaños de contactos</field>
         <field name="res_model">res.partner</field>
         <field name="view_mode">list,kanban,form</field>
-        <field name="search_view_id" ref="view_partner_birthday_search"/>
+        <field name="search_view_id" ref="view_ticteams_partner_birthday_search"/>
         <field name="domain">[('is_company','=',False)]</field>
         <field name="context">{
             'search_default_filter_has_birthday': 1,
@@ -162,17 +162,17 @@
     </record>
 
     <!-- Bind action to the views we created -->
-    <record id="action_partner_birthday_view_list" model="ir.actions.act_window.view">
+    <record id="action_ticteams_partner_birthday_view_list" model="ir.actions.act_window.view">
         <field name="sequence" eval="1"/>
         <field name="view_mode">list</field>
-        <field name="view_id" ref="view_partner_birthday_tree"/>
-        <field name="act_window_id" ref="action_partner_birthday"/>
+        <field name="view_id" ref="view_ticteams_partner_birthday_tree"/>
+        <field name="act_window_id" ref="action_ticteams_partner_birthday"/>
     </record>
-    <record id="action_partner_birthday_view_kanban" model="ir.actions.act_window.view">
+    <record id="action_ticteams_partner_birthday_view_kanban" model="ir.actions.act_window.view">
         <field name="sequence" eval="2"/>
         <field name="view_mode">kanban</field>
-        <field name="view_id" ref="view_partner_birthday_kanban"/>
-        <field name="act_window_id" ref="action_partner_birthday"/>
+        <field name="view_id" ref="view_ticteams_partner_birthday_kanban"/>
+        <field name="act_window_id" ref="action_ticteams_partner_birthday"/>
     </record>
 
 </odoo>

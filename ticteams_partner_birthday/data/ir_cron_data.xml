@@ -3,7 +3,7 @@
     <data noupdate="1">
 
         <!-- Daily scheduled action: send birthday popup notifications -->
-        <record id="ir_cron_partner_birthday_notification" model="ir.cron">
+        <record id="ir_cron_ticteams_partner_birthday_notification" model="ir.cron">
             <field name="name">Cumpleaños de contactos: Notificación diaria</field>
             <field name="model_id" ref="base.model_res_partner"/>
             <field name="state">code</field>
