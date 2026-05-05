@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>User Birthday</title>
+    <style>
+        body { font-family: 'Lato', Arial, sans-serif; color: #2c2c2c; margin: 0; padding: 0; }
+        .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+        .hero { background: linear-gradient(135deg, #714B67 0%, #875A7B 100%); color: #fff; padding: 64px 24px; text-align: center; }
+        .hero h1 { font-size: 48px; margin: 0 0 12px 0; font-weight: 700; }
+        .hero p { font-size: 20px; margin: 0; opacity: 0.95; }
+        .badges { margin-top: 18px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.18); padding: 6px 12px; border-radius: 16px; font-size: 13px; margin: 0 4px; }
+        .section { padding: 48px 0; }
+        .section h2 { font-size: 28px; color: #714B67; margin-top: 0; }
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+        .feature { background: #f8f6f9; border-left: 4px solid #714B67; padding: 20px; border-radius: 4px; }
+        .feature h3 { margin: 0 0 8px 0; font-size: 18px; color: #714B67; }
+        .feature p { margin: 0; font-size: 14px; line-height: 1.5; }
+        .footer { background: #2c2c2c; color: #ccc; text-align: center; padding: 24px; font-size: 13px; }
+        .footer a { color: #fff; text-decoration: none; }
+        ul.checklist { list-style: none; padding: 0; }
+        ul.checklist li { padding: 6px 0 6px 28px; position: relative; }
+        ul.checklist li:before { content: "✓"; position: absolute; left: 0; color: #28a745; font-weight: bold; }
+        .cta { text-align: center; margin: 32px 0; }
+    </style>
+</head>
+<body>
+
+    <div class="hero">
+        <div class="container">
+            <h1>🎂 User Birthday</h1>
+            <p>Never forget another teammate's birthday again.</p>
+            <div class="badges">
+                <span class="badge">Odoo 18.0</span>
+                <span class="badge">LGPL-3</span>
+                <span class="badge">By TICTeams</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container section">
+        <h2>What does it do?</h2>
+        <p>
+            <strong>User Birthday</strong> adds a Birthday field to internal
+            users and brings everything you need to celebrate your team:
+            sorted lists, filters, kanban cards, and real-time popup
+            notifications when somebody is celebrating today.
+        </p>
+        <ul class="checklist">
+            <li>Adds a <em>Birthday</em> date field on every internal user.</li>
+            <li>New <strong>Birthdays</strong> menu sorted by upcoming celebration.</li>
+            <li>Filters: <em>today</em>, <em>this week</em>, <em>within 30 days</em>, <em>missing birthday</em>.</li>
+            <li>Group by <em>birthday month</em>.</li>
+            <li>Computed fields: <em>next birthday</em>, <em>days left</em>, <em>age</em>.</li>
+            <li>Daily scheduled action that automatically notifies the team.</li>
+            <li>Real-time popup notification (bus) for every connected user.</li>
+            <li>Manual <em>Send notification now</em> button on the user form.</li>
+        </ul>
+    </div>
+
+    <div class="container section">
+        <h2>Key features</h2>
+        <div class="features">
+            <div class="feature">
+                <h3>📅 Birthday field</h3>
+                <p>A simple date field on the user form, with validation
+                (no future dates) and full chatter tracking.</p>
+            </div>
+            <div class="feature">
+                <h3>📋 Sorted list</h3>
+                <p>A dedicated list view sorting users by their next
+                upcoming birthday with colour decorations.</p>
+            </div>
+            <div class="feature">
+                <h3>🗂️ Filters &amp; groups</h3>
+                <p>Filter by today / this week / within 30 days, or group
+                by birthday month.</p>
+            </div>
+            <div class="feature">
+                <h3>🃏 Kanban view</h3>
+                <p>A clean kanban board that visually highlights the user
+                celebrating today.</p>
+            </div>
+            <div class="feature">
+                <h3>🔔 Popup notifications</h3>
+                <p>A daily cron pushes a real-time popup notification (bus)
+                to every internal user, sticky until dismissed.</p>
+            </div>
+            <div class="feature">
+                <h3>🛠️ Configurable cron</h3>
+                <p>The schedule can be tweaked under
+                Settings → Technical → Scheduled Actions.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container section">
+        <h2>How to use</h2>
+        <ol>
+            <li>Install the module from <em>Apps</em>.</li>
+            <li>Open any user and set their <strong>Birthday</strong>.</li>
+            <li>Open the <strong>Birthdays</strong> top-level menu to see
+            everyone sorted by upcoming celebration.</li>
+            <li>The cron <em>User Birthday: Daily Notification</em> runs
+            every day and pops up a notification when somebody is
+            celebrating their birthday today.</li>
+        </ol>
+    </div>
+
+    <div class="footer">
+        <p>© TICTeams · Released under the LGPL-3 licence</p>
+        <p><a href="https://www.ticteams.com">www.ticteams.com</a></p>
+    </div>
+
+</body>
+</html>

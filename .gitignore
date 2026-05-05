@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# Odoo
+*.pyc
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
