@@ -11,47 +11,47 @@ class ResPartner(models.Model):
     _inherit = "res.partner"
 
     birthday = fields.Date(
-        string="Birthday",
+        string="Cumpleaños",
         tracking=True,
-        help="Birth date of the contact. Used to compute upcoming birthday "
-             "reminders and to send notifications on the celebration day.",
+        help="Fecha de nacimiento del contacto. Se usa para calcular "
+             "recordatorios de cumpleaños y enviar notificaciones el día de la celebración.",
     )
     birthday_day = fields.Integer(
-        string="Birth Day",
+        string="Día de nacimiento",
         compute="_compute_birthday_parts",
         store=True,
-        help="Day of the month of the contact's birthday (1-31).",
+        help="Día del mes del cumpleaños del contacto (1-31).",
     )
     birthday_month = fields.Integer(
-        string="Birth Month",
+        string="Mes de nacimiento",
         compute="_compute_birthday_parts",
         store=True,
-        help="Month of the contact's birthday (1-12).",
+        help="Mes del cumpleaños del contacto (1-12).",
     )
     next_birthday = fields.Date(
-        string="Next Birthday",
+        string="Próximo cumpleaños",
         compute="_compute_birthday_parts",
         store=True,
-        help="Next upcoming birthday date (automatically rolled to next year "
-             "after the birthday has passed).",
+        help="Fecha del próximo cumpleaños (se actualiza automáticamente al año siguiente "
+             "una vez que la fecha ha pasado).",
     )
     days_to_birthday = fields.Integer(
-        string="Days Until Birthday",
+        string="Días para el cumpleaños",
         compute="_compute_birthday_parts",
         store=True,
-        help="Number of days remaining until the next birthday.",
+        help="Número de días restantes hasta el próximo cumpleaños.",
     )
     age = fields.Integer(
-        string="Age",
+        string="Edad",
         compute="_compute_birthday_parts",
         store=True,
-        help="Current age of the contact.",
+        help="Edad actual del contacto.",
     )
     is_birthday_today = fields.Boolean(
-        string="Birthday Today",
+        string="Cumpleaños hoy",
         compute="_compute_birthday_parts",
         store=True,
-        help="True when the contact's birthday matches today.",
+        help="Verdadero cuando el cumpleaños del contacto coincide con hoy.",
     )
 
     # ------------------------------------------------------------------
@@ -104,8 +104,8 @@ class ResPartner(models.Model):
         for partner in self:
             if partner.birthday and partner.birthday > today:
                 raise ValidationError(
-                    _("The birthday cannot be set in the future "
-                      "(contact: %s).") % partner.name
+                    _("El cumpleaños no puede ser una fecha futura "
+                      "(contacto: %s).") % partner.name
                 )
 
     # ------------------------------------------------------------------
@@ -138,19 +138,19 @@ class ResPartner(models.Model):
         for celebrant in celebrants:
             age_text = ""
             if celebrant.age:
-                age_text = _(" turning %s today") % celebrant.age
+                age_text = _(" cumpliendo %s años hoy") % celebrant.age
 
-            title = _("🎂 Happy Birthday!")
+            title = _("🎂 ¡Feliz cumpleaños!")
             message = _(
-                "%(name)s is celebrating their birthday%(age)s. "
-                "Don't forget to wish them well!"
+                "%(name)s está celebrando su cumpleaños%(age)s. "
+                "¡No olvides felicitarle!"
             ) % {"name": celebrant.name, "age": age_text}
 
             # Log on the celebrant's record (chatter)
             celebrant.message_post(
-                body=_("%(name)s is celebrating their birthday today%(age)s. 🎉")
+                body=_("%(name)s está celebrando su cumpleaños hoy%(age)s. 🎉")
                 % {"name": celebrant.name, "age": age_text},
-                subject=_("Happy Birthday!"),
+                subject=_("¡Feliz cumpleaños!"),
                 message_type="notification",
             )
 
@@ -182,10 +182,9 @@ class ResPartner(models.Model):
         ])
         payload = {
             "type": "success",
-            "title": _("🎂 Happy Birthday!"),
+            "title": _("🎂 ¡Feliz cumpleaños!"),
             "message": _(
-                "%s is celebrating their birthday. Don't forget to wish "
-                "them well!"
+                "%s está celebrando su cumpleaños. ¡No olvides felicitarle!"
             ) % self.name,
             "sticky": True,
         }
@@ -199,9 +198,8 @@ class ResPartner(models.Model):
             "type": "ir.actions.client",
             "tag": "display_notification",
             "params": {
-                "title": _("Notification sent"),
-                "message": _("Birthday notification pushed to all internal "
-                             "users."),
+                "title": _("Notificación enviada"),
+                "message": _("Notificación de cumpleaños enviada a todos los usuarios internos."),
                 "type": "success",
                 "sticky": False,
             },

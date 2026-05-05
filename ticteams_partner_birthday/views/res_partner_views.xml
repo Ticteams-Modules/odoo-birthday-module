@@ -8,21 +8,21 @@
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
             <xpath expr="//notebook/page[last()]" position="after">
-                <page name="birthday" string="Birthday">
+                <page name="birthday" string="Cumpleaños">
                     <group>
-                        <group string="Birthday Information">
+                        <group string="Información de cumpleaños">
                             <field name="birthday"/>
                             <field name="age" readonly="1"/>
                             <field name="is_birthday_today" readonly="1"
                                    invisible="not birthday"/>
                         </group>
-                        <group string="Upcoming">
+                        <group string="Próximo cumpleaños">
                             <field name="next_birthday" readonly="1"
                                    invisible="not birthday"/>
                             <field name="days_to_birthday" readonly="1"
                                    invisible="not birthday"/>
                             <button name="action_send_birthday_notification"
-                                    string="Send birthday notification now"
+                                    string="Enviar notificación de cumpleaños ahora"
                                     type="object"
                                     class="btn-primary"
                                     icon="fa-bell"
@@ -41,7 +41,7 @@
         <field name="name">res.partner.birthday.list</field>
         <field name="model">res.partner</field>
         <field name="arch" type="xml">
-            <list string="Contact Birthdays"
+            <list string="Cumpleaños de contactos"
                   default_order="days_to_birthday asc, name"
                   decoration-success="is_birthday_today"
                   decoration-info="days_to_birthday &gt; 0 and days_to_birthday &lt;= 7"
@@ -51,7 +51,7 @@
                 <field name="phone"/>
                 <field name="birthday"/>
                 <field name="next_birthday"/>
-                <field name="days_to_birthday" string="Days left"/>
+                <field name="days_to_birthday" string="Días restantes"/>
                 <field name="age"/>
                 <field name="is_birthday_today" widget="boolean_toggle"/>
                 <field name="birthday_month" optional="hide"/>
@@ -79,7 +79,7 @@
                     <t t-name="card">
                         <div t-attf-class="oe_kanban_card oe_kanban_global_click o_partner_birthday_card #{record.is_birthday_today.raw_value ? 'o_birthday_today' : ''}">
                             <div class="o_kanban_image">
-                                <img t-att-src="kanban_image('res.partner', 'image_128', record.id.raw_value)"
+                                <img t-attf-src="/web/image/res.partner/#{record.id.raw_value}/image_128"
                                      class="o_image_64_cover" alt="Avatar"/>
                             </div>
                             <div class="oe_kanban_details">
@@ -88,18 +88,18 @@
                                 </strong>
                                 <div t-if="record.is_birthday_today.raw_value"
                                      class="badge text-bg-success">
-                                    🎂 Today!
+                                    🎂 ¡Hoy!
                                 </div>
                                 <div t-else="">
                                     <i class="fa fa-birthday-cake"/>
                                     <field name="next_birthday"/>
                                     <span class="text-muted">
-                                        (<field name="days_to_birthday"/> days)
+                                        (<field name="days_to_birthday"/> días)
                                     </span>
                                 </div>
                                 <div t-if="record.age.raw_value">
                                     <small class="text-muted">
-                                        Age: <field name="age"/>
+                                        Edad: <field name="age"/>
                                     </small>
                                 </div>
                             </div>
@@ -115,24 +115,24 @@
         <field name="name">res.partner.birthday.search</field>
         <field name="model">res.partner</field>
         <field name="arch" type="xml">
-            <search string="Contact Birthdays">
-                <field name="name" string="Contact"
+            <search string="Cumpleaños de contactos">
+                <field name="name" string="Contacto"
                        filter_domain="['|', ('name','ilike',self), ('email','ilike',self)]"/>
                 <field name="birthday"/>
                 <separator/>
-                <filter name="filter_today" string="Birthday Today"
+                <filter name="filter_today" string="Cumpleaños hoy"
                         domain="[('is_birthday_today','=',True)]"/>
-                <filter name="filter_this_week" string="This Week"
+                <filter name="filter_this_week" string="Esta semana"
                         domain="[('days_to_birthday','&gt;=',0),('days_to_birthday','&lt;=',7)]"/>
-                <filter name="filter_this_month" string="Within 30 Days"
+                <filter name="filter_this_month" string="Próximos 30 días"
                         domain="[('days_to_birthday','&gt;=',0),('days_to_birthday','&lt;=',30)]"/>
                 <separator/>
-                <filter name="filter_has_birthday" string="Birthday Set"
+                <filter name="filter_has_birthday" string="Con cumpleaños"
                         domain="[('birthday','!=',False)]"/>
-                <filter name="filter_no_birthday" string="Birthday Missing"
+                <filter name="filter_no_birthday" string="Sin cumpleaños"
                         domain="[('birthday','=',False)]"/>
-                <group expand="0" string="Group By">
-                    <filter name="group_by_month" string="Birthday Month"
+                <group expand="0" string="Agrupar por">
+                    <filter name="group_by_month" string="Mes de cumpleaños"
                             context="{'group_by': 'birthday_month'}"/>
                 </group>
             </search>
@@ -141,7 +141,7 @@
 
     <!-- Action: Contact Birthdays -->
     <record id="action_partner_birthday" model="ir.actions.act_window">
-        <field name="name">Contact Birthdays</field>
+        <field name="name">Cumpleaños de contactos</field>
         <field name="res_model">res.partner</field>
         <field name="view_mode">list,kanban,form</field>
         <field name="search_view_id" ref="view_partner_birthday_search"/>
@@ -151,12 +151,12 @@
         }</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-                No contact has a birthday set yet
+                Ningún contacto tiene registrado su cumpleaños
             </p>
             <p>
-                Open any contact record and fill in the <b>Birthday</b> field
-                under the <i>Birthday</i> tab. Contacts will then appear here
-                ordered by their upcoming celebration.
+                Abre cualquier contacto y completa el campo <b>Cumpleaños</b>
+                en la pestaña <i>Cumpleaños</i>. Los contactos aparecerán aquí
+                ordenados por su próxima celebración.
             </p>
         </field>
     </record>
