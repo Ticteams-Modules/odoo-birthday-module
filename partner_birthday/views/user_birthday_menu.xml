@@ -14,16 +14,5 @@
               action="action_partner_birthday"
               sequence="10"/>
 
-    <!-- Configuration submenu (link to standard contacts) -->
-    <menuitem id="menu_partner_birthday_configuration"
-              name="Configuration"
-              parent="menu_partner_birthday_root"
-              sequence="90"/>
-
-    <menuitem id="menu_partner_birthday_contacts"
-              name="Contacts"
-              parent="menu_partner_birthday_configuration"
-              action="base.action_res_partner"
-              sequence="10"/>
 
 </odoo>
