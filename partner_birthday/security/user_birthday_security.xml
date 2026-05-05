@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Security for the User Birthday module is declared in
+    security/ir.model.access.csv
+
+    This file is kept as an empty placeholder only because the underlying
+    storage does not allow file deletion; it is NOT loaded by the manifest.
+-->
+<odoo/>

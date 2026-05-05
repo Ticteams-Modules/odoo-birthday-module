@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Add the birthday tab to the standard contact form -->
+    <record id="view_partner_form_inherit_birthday" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.birthday</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[last()]" position="after">
+                <page name="birthday" string="Birthday">
+                    <group>
+                        <group string="Birthday Information">
+                            <field name="birthday"/>
+                            <field name="age" readonly="1"/>
+                            <field name="is_birthday_today" readonly="1"
+                                   invisible="not birthday"/>
+                        </group>
+                        <group string="Upcoming">
+                            <field name="next_birthday" readonly="1"
+                                   invisible="not birthday"/>
+                            <field name="days_to_birthday" readonly="1"
+                                   invisible="not birthday"/>
+                            <button name="action_send_birthday_notification"
+                                    string="Send birthday notification now"
+                                    type="object"
+                                    class="btn-primary"
+                                    icon="fa-bell"
+                                    invisible="not birthday"/>
+                        </group>
+                    </group>
+                    <field name="birthday_day" invisible="1"/>
+                    <field name="birthday_month" invisible="1"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Dedicated list view sorted by upcoming birthday -->
+    <record id="view_partner_birthday_tree" model="ir.ui.view">
+        <field name="name">res.partner.birthday.list</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <list string="Contact Birthdays"
+                  default_order="days_to_birthday asc, name"
+                  decoration-success="is_birthday_today"
+                  decoration-info="days_to_birthday &gt; 0 and days_to_birthday &lt;= 7"
+                  decoration-muted="not birthday">
+                <field name="name"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="birthday"/>
+                <field name="next_birthday"/>
+                <field name="days_to_birthday" string="Days left"/>
+                <field name="age"/>
+                <field name="is_birthday_today" widget="boolean_toggle"/>
+                <field name="birthday_month" optional="hide"/>
+                <field name="birthday_day" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Kanban view: birthday cards -->
+    <record id="view_partner_birthday_kanban" model="ir.ui.view">
+        <field name="name">res.partner.birthday.kanban</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <kanban default_order="days_to_birthday asc"
+                    class="o_partner_birthday_kanban">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="birthday"/>
+                <field name="next_birthday"/>
+                <field name="days_to_birthday"/>
+                <field name="is_birthday_today"/>
+                <field name="age"/>
+                <field name="image_128"/>
+                <templates>
+                    <t t-name="card">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click o_partner_birthday_card #{record.is_birthday_today.raw_value ? 'o_birthday_today' : ''}">
+                            <div class="o_kanban_image">
+                                <img t-att-src="kanban_image('res.partner', 'image_128', record.id.raw_value)"
+                                     class="o_image_64_cover" alt="Avatar"/>
+                            </div>
+                            <div class="oe_kanban_details">
+                                <strong class="o_kanban_record_title">
+                                    <field name="name"/>
+                                </strong>
+                                <div t-if="record.is_birthday_today.raw_value"
+                                     class="badge text-bg-success">
+                                    🎂 Today!
+                                </div>
+                                <div t-else="">
+                                    <i class="fa fa-birthday-cake"/>
+                                    <field name="next_birthday"/>
+                                    <span class="text-muted">
+                                        (<field name="days_to_birthday"/> days)
+                                    </span>
+                                </div>
+                                <div t-if="record.age.raw_value">
+                                    <small class="text-muted">
+                                        Age: <field name="age"/>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Search view with filters and groupings -->
+    <record id="view_partner_birthday_search" model="ir.ui.view">
+        <field name="name">res.partner.birthday.search</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <search string="Contact Birthdays">
+                <field name="name" string="Contact"
+                       filter_domain="['|', ('name','ilike',self), ('email','ilike',self)]"/>
+                <field name="birthday"/>
+                <separator/>
+                <filter name="filter_today" string="Birthday Today"
+                        domain="[('is_birthday_today','=',True)]"/>
+                <filter name="filter_this_week" string="This Week"
+                        domain="[('days_to_birthday','&gt;=',0),('days_to_birthday','&lt;=',7)]"/>
+                <filter name="filter_this_month" string="Within 30 Days"
+                        domain="[('days_to_birthday','&gt;=',0),('days_to_birthday','&lt;=',30)]"/>
+                <separator/>
+                <filter name="filter_has_birthday" string="Birthday Set"
+                        domain="[('birthday','!=',False)]"/>
+                <filter name="filter_no_birthday" string="Birthday Missing"
+                        domain="[('birthday','=',False)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_month" string="Birthday Month"
+                            context="{'group_by': 'birthday_month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action: Contact Birthdays -->
+    <record id="action_partner_birthday" model="ir.actions.act_window">
+        <field name="name">Contact Birthdays</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="view_partner_birthday_search"/>
+        <field name="domain">[('is_company','=',False)]</field>
+        <field name="context">{
+            'search_default_filter_has_birthday': 1,
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No contact has a birthday set yet
+            </p>
+            <p>
+                Open any contact record and fill in the <b>Birthday</b> field
+                under the <i>Birthday</i> tab. Contacts will then appear here
+                ordered by their upcoming celebration.
+            </p>
+        </field>
+    </record>
+
+    <!-- Bind action to the views we created -->
+    <record id="action_partner_birthday_view_list" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_partner_birthday_tree"/>
+        <field name="act_window_id" ref="action_partner_birthday"/>
+    </record>
+    <record id="action_partner_birthday_view_kanban" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="view_partner_birthday_kanban"/>
+        <field name="act_window_id" ref="action_partner_birthday"/>
+    </record>
+
+</odoo>
