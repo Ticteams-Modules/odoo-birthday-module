@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Heredar la vista del formulario de sale.order para resaltar líneas del producto especificado -->
+    <record id="view_order_form_line_highlight" model="ir.ui.view">
+        <field name="name">sale.order.form.line.highlight</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']//list" position="attributes">
+                <attribute name="decoration-success">is_highlighted_product</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- También heredar la vista de lista independiente de sale.order.line -->
+    <record id="view_order_line_tree_highlight" model="ir.ui.view">
+        <field name="name">sale.order.line.list.highlight</field>
+        <field name="model">sale.order.line</field>
+        <field name="inherit_id" ref="sale.view_order_line_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+                <attribute name="decoration-success">is_highlighted_product</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

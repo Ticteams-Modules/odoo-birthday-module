@@ -1,0 +1,21 @@
+/* Fondo verde para líneas de pedido con el producto resaltado */
+
+/* Lista embebida en el formulario de sale.order (order_line) */
+.o_field_one2many[name="order_line"] .o_data_row.text-success > td {
+    background-color: rgba(25, 135, 84, 0.15) !important;
+    color: inherit !important;
+}
+
+.o_field_one2many[name="order_line"] .o_data_row.text-success:hover > td {
+    background-color: rgba(25, 135, 84, 0.25) !important;
+}
+
+/* Lista independiente de sale.order.line */
+.o_list_view .o_data_row.text-success > td {
+    background-color: rgba(25, 135, 84, 0.15) !important;
+    color: inherit !important;
+}
+
+.o_list_view .o_data_row.text-success:hover > td {
+    background-color: rgba(25, 135, 84, 0.25) !important;
+}

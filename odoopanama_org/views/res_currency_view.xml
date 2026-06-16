@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_currency_form">
+        <field name="name">res.currency.form.inherit.amount.to.text</field>
+        <field name="model">res.currency</field>
+        <field name="inherit_id" ref="base.view_currency_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="plural_name" />
+                <field name="singular_name" />
+                <field name="fraction_name" />
+                <field name="show_fraction" />
+	        </xpath>
+        </field>
+    </record>
+</odoo> 
+

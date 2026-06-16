@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="point_of_sale.ReceiptHeader" t-inherit="point_of_sale.ReceiptHeader" t-inherit-mode="extension" owl="1">
+        <xpath expr="//t[1]" position="replace">
+            <t t-name="point_of_sale.ReceiptHeader">
+                <t t-if="props.data?.company?.is_cpe">
+                    <div class="text-center mt-3">
+                        <strong>DGI<br/>
+                        Comprobante Auxiliar de Factura Electrónica</strong>
+                    </div>
+                </t>
+                <img t-attf-src="/web/image?model=res.company&amp;id={{props.data.company.id}}&amp;field=logo" alt="Logo" class="pos-receipt-logo"/>
+
+                <t t-if="props.data?.company?.is_cpe">
+                    <div class="text-center">
+                        <strong>
+                            <t t-if="props.data.company.type_of_invoice_document" t-esc="props.data.company.type_of_invoice_document" />
+                            <t t-else="">FACTURA DE OPERACIÓN INTERNA</t>
+                        </strong>
+
+                        <t t-if='props.data.company.invoice_number'>
+                            <div style="font-size: 14px;font-weight: bold;">
+                                <t t-esc='props.data.company.invoice_number' />
+                            </div>
+                        </t>
+                        <t t-if='props.data.company.billing_point'>
+                            <div style="font-size: 12px;font-weight: bold;">
+                                <span>Punto de Facturacion Fiscal:</span>
+                                <t t-esc='props.data.company.billing_point' />
+                            </div>
+                        </t>
+                    </div>
+                </t>
+
+                <t t-if="!props.data?.company?.env">
+                    <div class="text-center" style="border: 1px solid;border-style: dashed;border-left: oldlace;border-right: oldlace;">
+                        <span>Documento sin valor fiscal, generado en ambiente de pruebas.</span>
+                    </div>
+                </t>
+                <!-- <h1 class="tracking-number text-center" style="font-size: 100px" t-if="props.data.trackingNumber and props.data.bigTrackingNumber" t-esc="props.data.trackingNumber" /> -->
+                <div class="d-flex flex-column align-items-center">
+                    <div class="pos-receipt-contact">
+                        <div style="text-transform: uppercase;font-size: 14px;">
+                            <strong>
+                                <t t-esc='props.data.company.name' />
+                            </strong>
+                        </div>
+
+                        <span t-if='props.data.company.street'>
+                            <t t-esc='props.data.company.street' />
+                        ,
+                        </span>
+                        <span t-if='props.data.company.l10n_pa_corregimiento'>
+                            <t t-esc="props.data.company.l10n_pa_corregimiento" />
+                        -
+                        </span>
+                        <span t-if='props.data.company.city'>
+                            <t t-esc="props.data.company.city" />
+                        -
+                        </span>
+                        <span t-if='props.data.company.state_id'>
+                            <t t-esc="props.data.company.state_id.name" />
+                        </span>
+
+
+                        <t t-if="props.data.company.phone">
+                            <div>Tel:<t t-esc="props.data.company.phone" />
+                            </div>
+                        </t>
+                        <t t-if="props.data?.company?.is_cpe">
+                            <div style="font-size: 12px;font-weight: bold;">
+                                RUC: <t t-esc='props.data.company.vat' />
+                                DV: <t t-esc='props.data.company.pa_dv' />
+                            </div>
+                        </t>
+                        <div t-if="props.data.company.email" t-esc="props.data.company.email" />
+                        <div t-if="props.data.company.website" t-esc="props.data.company.website" />
+                        <div t-if="props.data.header" style="white-space:pre-line" t-esc="props.data.header" />
+                        <div t-if="props.data.cashier" class="cashier">
+                            <div>--------------------------------</div>
+                            <div t-esc="props.data.cashier" />
+                        </div>
+                        <t t-if="!props.data?.company?.is_cpe">
+                            <div t-if="props.data.trackingNumber and !props.data.bigTrackingNumber">
+                                <span class="tracking-number fs-1" t-esc="props.data.trackingNumber" />
+                            </div>
+                        </t>
+                    </div>
+                </div>
+                </t>
+        </xpath>
+    </t>
+
+
+    <t t-name="point_of_sale.OrderReceipt" t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension" owl="1">
+        <xpath expr="//ReceiptHeader" position="after">
+            <br/>
+            <table id="customer_information" style="width:100%; font-size:small; font-weight: normal;">
+                <t t-if="props.data.partner">
+                    <span style="font-size: 12px; font-weight: bold;">CLIENT</span>
+                    <tr t-if="props.data.partner.name">
+                        <th style="font-weight: normal;" colspan="2" class="text-left">
+                            <t t-esc="props.data.partner.name" />
+                        </th>
+                    </tr>
+                    <tr t-if="props.data.partner.vat">
+                        <th class="text-left" style="font-weight: normal;">
+                            RUC/CDL :
+                            <t t-esc="props.data.partner.vat" />
+                        </th>
+                    </tr>
+                    <tr t-if="props.data.partner.address">
+                        <th style="font-weight: normal;" colspan="2" class="text-left">
+                            <span>
+                                <t t-esc="props.data.partner.address" />
+                            </span>
+                        </th>
+                    </tr>
+                </t>
+                <tr>
+                    <t t-if="props.data.invoice_number">
+                        <th style="font-weight: normal;" class="text-left" width="50%">
+                            <span style="font-size: 12px; font-weight: bold;">FORMA DE PAGO:</span>
+                            CONTADO
+                        </th>
+                    </t>
+                </tr>
+                <tr>
+                    <th style="font-weight: normal;" class="text-left" width="50%">
+                        <span style="font-size: 12px; font-weight: bold;">DATE:</span>
+                        <span t-esc="props.data.date" />
+                    </th>
+                </tr>
+            </table>
+            <br/>
+        </xpath>
+
+        <xpath expr="//OrderWidget" position="replace">
+            <table id="products_header" style="width:100%; font-size:small" class="soticket-table">
+                <thead>
+                    <tr style="border-top:1px dashed black; border-bottom:1px dashed black" class="top-dashed bottom-dashed">
+                        <th class="text-center">QTY.</th>
+                        <th class="text-center">DESCRIPTION</th>
+                        <th class="text-center">P.U.</th>
+                        <th class="text-center">TOTAL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="props.data.orderlines" t-as="line" t-key="line_index">
+                         <tr style="font-size: 13px;font-weight: bolder !important;">
+                            <td colspan="4" class="text-start">
+                                <t t-esc="line.productName" />
+                                <span class="px-1 border rounded text-bg-view">
+                                    <t t-if="line.tax_amount > 0"> (A)</t>
+                                    <t t-else=""> (E)</t>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-center">
+                                <t t-esc="line.qty" />
+                            </td>
+                            <td class="text-start">
+                                <t t-if="line.unit" t-esc="line.unit" />
+                            </td>
+                            <td class="text-end">
+                                <t t-esc="line.unitPrice" />
+                            </td>
+                            <td class="text-end">
+                                <t t-esc="line.price" />
+                            </td>
+                        </tr>
+                        <t t-if="line.default_code">
+                            <tr>
+                                <td colspan="4" style="font-size: 11px; color: #666;">
+                                    Código: <t t-esc="line.default_code" />
+                                </td>
+                            </tr>
+                        </t>
+                        <t t-if="line.customerNote">
+                            <tr>
+                                <td colspan="4" style="font-size: 11px; color: #666;">
+                                    Nota: <t t-esc="line.customerNote" />
+                                </td>
+                            </tr>
+                        </t>
+                    </t>
+                </tbody>
+            </table>
+        </xpath>
+
+        <xpath expr="//div[1]/t[2]/div[3]" position="inside">
+            <div style="text-align:lenf;font-size: small;">
+                <t t-if="props.data.amount_in_words">
+                    <span style="font-size: 12px;font-weight: bold;">SON: </span>
+                    <span>
+                        <t t-esc="props.data.amount_in_words" />
+                    </span>
+                </t>
+            </div>
+        </xpath>
+
+        <xpath expr="//div[1]/t[2]/div[5]" position="after">
+            <div style="border-top: 1px dashed black; font-size:small">
+                <span>CANTIDAD DE ITEMS:</span>
+                <span class="pos-receipt-right-align">
+                    <t t-esc="props.data.orderlines.length"/>
+                </span>
+            </div>
+            <br/>
+            <t t-if="props.data.cufe">
+                <div style="font-size:small;text-align: center;">
+                    <span>
+                        <b>Consulte por la clave de acceso en</b>
+                        <br/>
+                        <div style="line-height: 11px !important;">
+                            <span style="font-size: 11px;">https://dgi-fep.mef.gob.pa/Consultas/FacturasPorCUFE: <t t-esc="props.data.cufe" /></span>
+                        </div>
+                    </span>
+                </div>
+            </t>
+            <t t-if="props.data.authorization_protocol">
+                <div style="font-size:small;text-align: center;">
+                    <span>
+                        <b>Consulte por la clave de acceso en</b>
+                        <br/>
+                        <div style="line-height: 11px !important;">
+                            <span style="font-size: 11px;"><t t-esc="props.data.authorization_protocol" /></span>
+                        </div>
+                    </span>
+                </div>
+            </t>
+            <t t-if="props.data.qrcontent and props.data.is_cpe">
+                <div class="pos-receipt-qr text-center">
+                    <img t-att-src="generateQR(props.data.qrcontent)" style="width:210px; height:210px;"/>
+                </div>
+            </t>
+
+            <t t-if="props.data.is_cpe">
+                <div style="text-align: center; font-size: 11px;">
+                    <div style="line-height: 11px !important;" t-if="props.data.company?.pac_signature">
+                        <span t-esc="props.data.company.pac_signature"/>
+                    </div>
+                    <strong>
+                        <span style="font-size:small" t-if="props.data.control_url" t-esc="props.data.control_url" />
+                    </strong>
+                </div>
+            </t>
+        </xpath>
+
+        <xpath expr="//div[1]/t[2]/div[1]" position="replace">
+            <br/>
+            <div t-if="taxTotals and taxTotals.has_tax_groups" class="pos-receipt-taxes" style="border: 1px solid;border-style: dashed;border-left: oldlace;border-right: oldlace;">
+                    <t t-foreach="taxTotals.subtotals" t-as="subtotal" t-key="subtotal.name">
+                        <div class="d-flex">
+                            <span t-if="showTaxGroupLabels" class="me-2" style="visibility: hidden;">A</span>
+                            <span class="fw-bolder text-nowrap mw-100" t-out="subtotal.name"/>
+                            <span t-esc="props.formatCurrency(subtotal.base_amount_currency)" class="ms-auto"/>
+                        </div>
+
+                        <div t-foreach="subtotal.tax_groups" t-as="tax_group" t-key="tax_group.id" class="d-flex">
+                            <t t-if="showTaxGroupLabels">
+                                <span t-if="tax_group.group_label" t-out="tax_group.group_label" class="me-2"/>
+                                <span t-else="" class="me-2" style="visibility: hidden;">A</span>
+                            </t>
+                            <span>
+                                <span t-esc="tax_group.group_name"/>
+                                <t t-if="!taxTotals.same_tax_base">
+                                    on
+                                    <span t-esc="props.formatCurrency(tax_group.base_amount_currency)"/>
+                                </t>
+                            </span>
+                            <span t-esc="props.formatCurrency(tax_group.tax_amount_currency)" class="ms-auto"/>
+                        </div>
+                    </t>
+                </div>
+        </xpath> 
+        <xpath expr="//div[1]/t[2]/div[2]" position="replace"/>
+    </t>
+
+
+
+
+</templates>

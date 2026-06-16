@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_odoopanama_cpe,access_odoopanama_cpe,model_odoopanama_cpe,,1,0,0,0
+access_odoopanama_cpe_user,access_odoopanama_cpe_user,model_odoopanama_cpe,group_odoopanama_org_cpe_user,1,1,1,0
+access_odoopanama_cpe_accountant,access_odoopanama_cpe_accountant,model_odoopanama_cpe,group_odoopanama_org_cpe_accountant,1,1,1,0
+access_odoopanama_cpe_manager,access_odoopanama_cpe_manager,model_odoopanama_cpe,group_odoopanama_org_cpe_manager,1,1,1,1
+access_pa_payment_date,access_pa_payment_date,model_pa_payment_date,base.group_user,1,1,1,1
+access_account_move_annul,access_account_move_annul,model_account_move_annul,base.group_user,1,1,1,1
+access_payment_wizard,access_payment_wizard,model_payment_wizard,base.group_user,1,1,1,1
+access_payment_wizard_line,access_payment_wizard_line,model_payment_wizard_line,base.group_user,1,1,1,1
+access_panama_unspsc_code,access_l10n_panama_unspsc_code,model_panama_unspsc_code,base.group_user,1,0,0,0
+access_l10n_pa_res_city_corregimiento,access_l10n_pa_res_city_corregimiento,model_l10n_pa_res_city_corregimiento,base.group_user,1,1,1,1

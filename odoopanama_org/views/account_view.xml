@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<record model="ir.ui.view" id="view_move_form">
+		<field name="name">account.move.form.inherit</field>
+		<field name="model">account.move</field>
+		<field name="inherit_id" ref="account.view_move_form" />
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='currency_id']" position="after">
+				<field name="annul" invisible="1" />
+			</xpath>
+			<xpath expr="//field[@name='partner_id']" position="attributes">
+				<attribute name="domain">[('parent_id', '=', False), ('type', '=', 'contact')]</attribute>
+			</xpath>
+			<xpath expr="//button[@name='action_reverse']" position="attributes">
+				<attribute name="string">Nota de credito</attribute>
+			</xpath>
+			<xpath expr="//sheet/group[1]/group[1]/field[@name='ref']" position="after">
+				<field name="is_subject_to_retention"  readonly="'state' != 'draft'"/>
+			</xpath> 
+
+			<xpath expr="//page[@id='invoice_tab']/group[1]/group[2]/group[1]/field[@name='amount_residual']" position="after">
+				<field name="retention_amount" string="Retencion"/>
+			</xpath> 
+
+		</field>
+	</record>
+	<record model="ir.ui.view" id="view_move_form_debit">
+		<field name="name">account.move.form.inherit</field>
+		<field name="model">account.move</field>
+		<field name="inherit_id" ref="account_debit_note.view_move_form_debit" />
+		<field name="arch" type="xml">
+			<xpath expr="//header/button[@name='action_reverse']" position="after">
+				<button name="%(account_debit_note.action_view_account_move_debit)d" string='Nota de Débito'
+						type='action' groups="account.group_account_invoice"
+						invisible="move_type not in ('out_invoice', 'in_invoice', 'in_refund') or state != 'posted'"/>
+			</xpath>
+		</field>
+	</record>
+
+	<record model="ir.ui.view" id="view_invoice_tree">
+		<field name="name">account.invoice.tree.inherit.annul</field>
+		<field name="model">account.move</field>
+		<field name="inherit_id" ref="account.view_invoice_tree" />
+		<field name="arch" type="xml">
+			<xpath expr="//list" position="attributes">
+				<attribute name="decoration-muted">state in ['cancel','annul']</attribute>
+			</xpath>
+		</field>
+	</record>
+
+	<record model="ir.ui.view" id="view_account_invoice_report_search">
+		<field name="name">account.invoice.report.search.inherit.annul</field>
+		<field name="model">account.invoice.report</field>
+		<field name="inherit_id" ref="account.view_account_invoice_report_search" />
+		<field name="arch" type="xml">
+			<xpath expr="//filter[@name='current']" position="attributes">
+				<attribute name="domain">[('state','not in', ('draft','cancel'))]</attribute>
+			</xpath>
+		</field>
+	</record>
+
+</odoo> 

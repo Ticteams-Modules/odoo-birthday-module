@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="invoice_view_form" model="ir.ui.view">
+            <field name="name">account_move_panamanian_inherit_form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='button_cancel']" position="after">
+                    <button name="action_open_payment_wizard" string="Método de Pago" type="object" class="btn btn-warning" icon="fa-credit-card" data-hotkey="r" invisible="state != 'draft'"/>
+                    <button name="action_annul" type="object" string="Anular Factura" invisible="move_type not in ('out_invoice', 'out_refund') or state != 'posted' or is_move_sent or not is_cpe" groups="account.group_account_invoice" class="btn btn-danger" />
+                    <button name="action_annul" type="object" string="Anular Factura" invisible="move_type not in ('out_invoice', 'out_refund') or state != 'posted' or not is_move_sent or not is_cpe" groups="account.group_account_invoice" />
+                    <button name="pa_generate_send" type="object" string="Enviar FE" invisible="move_type not in ('out_invoice', 'out_refund') or state != 'posted' or state_dgi == 'procesado' or not is_cpe" groups="account.group_account_invoice" class="btn btn-primary" style="background-color: #007bff;border-color: #007bff;"/>
+
+                </xpath>
+                <xpath expr="//widget[@name='web_ribbon']" position="after">
+                    <widget name="web_ribbon" title="Anulado" bg_color="bg-danger" invisible="state not in ('cancel')" />
+
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name="context">{'search_default_customer':1, 'show_address': 1, 'default_company_type': 'company','force_pe_journal':True}</attribute>
+                </xpath>
+                <xpath expr="//button[@name='button_draft']" position="replace">
+                    <button name="button_draft" string="Regresar a borrador" type="object" invisible="is_cpe or restrict_mode_hash_table or state not in ('posted', 'cancel', 'annul')" />
+                </xpath>
+                <xpath expr="//sheet/div[2]" position="before">
+                    <div>
+                        <field name="dgi_qr_code" widget="image" class="oe_avatar" options="{'size': [75, 75]}" invisible="state in ('draft', 'cancel')"/>
+                    </div>
+                </xpath>
+                <xpath expr="//field[@name='payment_reference']" position="after">
+                    <field name="state_dgi" invisible="not is_cpe or state in ('draft')" />
+                </xpath>
+                <xpath expr="//field[@name='l10n_latam_document_type_id']" position="after">
+                    <field name="pa_response" invisible="not is_cpe or state in ('draft')" decoration-danger="state_dgi in ['error']" decoration-success="state_dgi in ['procesado']"/>
+                </xpath>
+                <xpath expr="//div[@name='journal_div']/field[@name='journal_id']" position="after">
+                    <field name="pa_dgi_nature_operation" readonly="state != 'draft'" />
+                </xpath>
+                <xpath expr="//page[@id='other_tab']/group[1]/group[1]/field[@name='partner_bank_id']" position="after">
+                    <field name="pa_dgi_destiny_operation" readonly="state != 'draft'"/>
+                    <field name="pa_dgi_type_operation" readonly="state != 'draft'"/>
+
+                    <field name="pa_dgi_type_emission"  />
+                    <field name="pa_dgi_date_contingency" invisible="pa_dgi_type_emission in ('01', '03')" required="pa_dgi_type_emission not in ('01', '03')"/>
+                    <field name="pa_dgi_reason_contingency" invisible="pa_dgi_type_emission in ('01', '03')" required="pa_dgi_type_emission not in ('01', '03')"/>
+
+                </xpath>
+                <xpath expr="//page[@id='other_tab']/group[1]/group[2]/field[@name='invoice_incoterm_id']" position="before">
+                    <field name="pa_dgi_type_sale" readonly="state != 'draft'"/>
+                </xpath>
+                <xpath expr="//page[@name='other_info']" position="after">
+                    <page string="Detalles FE - PAC" name="panamanian_customization" invisible="not is_cpe">
+                        <group>
+                            <group>
+                                <field name="pa_edocument_id" readonly="state not in ('draft')" groups="odoopanama_org.group_odoopanama_org_cpe_user" />
+                                <field name="pa_voided_id" readonly="True" invisible="not pa_voided_id" />
+                                <field name="cancellation_reason" invisible="not cancellation_reason" />
+                                <field name="is_cpe" invisible="1" />
+                                <field name="pa_invoice_state" />
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Informacion de Pagos" name="panamanian_payment_date" invisible="not is_cpe">
+                        <group string="Pagos" >
+                            <group colspan="2">
+                                <field name="pa_qty_fees" required="True" />
+                                <button name="generate_pa_fees" invisible="state != 'draft'" nolabel="1" type="object" class="btn-primary" string="Generar Pagos" />
+                            </group>
+                            <group colspan="5">
+                                <field name="pa_payment_lines" readonly="state != 'draft'">
+                                    <list >
+                                        <field name="number_quot" />
+                                        <field name="amount" />
+                                        <field name="pa_payment_method" required="True"/>
+                                        <field name="date" />
+                                    </list>
+                                </field>
+                            </group>
+                        </group>
+
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_invoice_tree" model="ir.ui.view">
+            <field name="name">account_move_panamanian_inherit_form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_invoice_tree" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='status_in_payment']" position="after">
+                    <field name="state_dgi" optional="show" />
+                </xpath>
+                 <xpath expr="//list" position="attributes">
+                    <attribute name="decoration-danger">state_dgi in ['error']</attribute>
+			    </xpath>
+            </field>
+        </record>
+
+        
+
+    </data>
+</odoo> 

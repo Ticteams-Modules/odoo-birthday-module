@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_tax_form_pa_retention">
+        <field name="name">account.tax.form.inherit.pa.retention</field>
+        <field name="model">account.tax</field>
+        <field name="inherit_id" ref="account.view_tax_form" />
+        <field name="arch" type="xml">
+            <!--
+                Agrega checkboxes de retención ITBMS justo después del campo
+                "amount_type" que siempre está presente en la vista estándar de Odoo.
+            -->
+            <xpath expr="//field[@name='amount_type']" position="after">
+                <group string="Retención ITBMS (Panamá)">
+                    <field name="pa_is_charge" />
+                    <field name="pa_is_retention_tax" />
+                    <field name="pa_is_exemption_tax" />
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

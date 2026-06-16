@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- Vista base del diario (fusión de odoopanama_org_base + odoopanama_org_cpe) -->
+    <record model="ir.ui.view" id="view_account_journal_form">
+        <field name="name">account.journal.form.inherit</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_journal_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//notebook//page[@name='advanced_settings']" position="after">
+                <page name="pe_config" string="Configuracion Panameña">
+                    <group name="panamanian_settings" string="Configuracion Panameña" invisible="type not in ('sale', 'purchase')">
+                        <group>
+                            <field name="is_cpe" invisible="type != 'sale'" groups="odoopanama_org.group_odoopanama_org_cpe_manager" />
+                            <field name="is_synchronous" invisible="not is_cpe" groups="odoopanama_org.group_odoopanama_org_cpe_manager" />
+                            <field name="l10n_latam_document_type_id" invisible="type not in ('sale', 'purchase')"/>
+                            <field name="credit_note_id" invisible="type not in ('sale', 'purchase')"/>
+                            <field name="dedit_note_id" invisible="type not in ('sale', 'purchase')"/>
+                            <field name="l10n_latam_use_documents" invisible="type not in ('sale', 'purchase')"/>
+                        </group>
+                    </group>
+                    <group name="panamanian_payment" string="Método de Pago" invisible="type not in ('cash', 'bank')">
+                        <group>
+                            <field name="pa_payment_method" />
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

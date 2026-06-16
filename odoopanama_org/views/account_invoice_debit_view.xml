@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="view_account_invoice_refund_dn" model="ir.ui.view">
+            <field name="name">move.refund.debit.form</field>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <form string="Debit Note">
+                    <group>
+                        <group>
+                            <field name="invoice_date" />
+                            <field name="date" groups="base.group_no_one" />
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_account_invoice_refund_debit" model="ir.actions.act_window">
+            <field name="name">Invoice</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_account_invoice_refund_dn" />
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo> 

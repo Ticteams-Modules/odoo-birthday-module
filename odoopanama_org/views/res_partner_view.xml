@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- Vista de partner con campos Panamá (de odoopanama_org_vat) -->
+    <record model="ir.ui.view" id="view_partner_form">
+        <field name="name">res.partner.view.form.inherit.l10n.pa.vat</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="l10n_latam_base.view_partner_latam_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_type']" position="attributes">
+                <attribute name="invisible">pa_type_client != 'taxpayer'</attribute>
+            </xpath>
+            <xpath expr="//label[@for='l10n_latam_identification_type_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='l10n_latam_identification_type_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='vat']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//h1" position="after">
+                <div class="o_row">
+                    <field name="l10n_latam_identification_type_id" placeholder="Document Type" colspan="1" nolabel="1" style="font-size: 16px; width: 70%" invisible="parent_id" />
+                    <field name="vat" placeholder="Número de RUC" colspan="3" nolabel="1" style="font-size: 16px; width: 37% !important;" invisible="parent_id" />
+                    <field name="pa_dv" placeholder="DV" colspan="1" nolabel="1" style="font-size: 16px; background-color: azure;" invisible="parent_id or pa_type_client in ('consumer')" required="pa_type_client in ('tax_payer')" />
+                </div>
+            </xpath>
+
+            <xpath expr="//field[@name='category_id']" position="after">
+                <field name="is_validate" invisible="True" />
+                <field name="pa_type_client" />
+                <!-- campo de retención ITBMS (de odoopanama_org_webpos) -->
+                <field name="pa_retention_type" />
+            </xpath>
+
+            <xpath expr="//page[@name='sales_purchases']" position="after">
+                <page name="dgi_details" string="DGI" invisible="not is_company">
+                    <group name="container_sunat_general" invisible="not is_company">
+                        <group string="General information">
+                            <field name="commercial_name" placeholder="Tradename" invisible="not is_company" required="is_company" readonly="is_validate" force_save="1"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Vista de dirección (de odoopanama_org_vat) -->
+    <record model="ir.ui.view" id="view_partner_form_pa">
+        <field name="name">res.partner.view.form.inherit.pa.vat</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//group[1]/group[1]/div[hasclass('o_address_format')]" position="replace">
+                <div class="o_address_format">
+                    <field name="street" placeholder="Street..." class="o_address_street" readonly="type == 'contact' and parent_id"/>
+                    <field name="street2" placeholder="Street 2..." class="o_address_street" readonly="type == 'contact' and parent_id"/>
+                    <field name="city" invisible="1" placeholder="City" class="o_address_city" readonly="type == 'contact' and parent_id"/>
+                    <field name="l10n_pa_corregimiento" domain="[('city_id', '=?', city_id)]" options="{'no_open': True, 'no_create': True}" placeholder="Corregimiento..."/>
+                    <field name="city_id" domain="[('state_id', '=?', state_id)]" options="{'no_open': True, 'no_create': True}" placeholder="Distrito..."/>
+                    <field name="state_id" class="o_address_state" placeholder="Provincia..." options="{'no_open': True, 'no_quick_create': True}" readonly="type == 'contact' and parent_id" context="{'country_id': country_id, 'default_country_id': country_id, 'zip': zip}"/>
+                    <field name="country_id" placeholder="Country" class="o_address_country" options="{'no_open': True, 'no_create': True}" readonly="type == 'contact' and parent_id"/>
+                    <field name="zip" placeholder="ZIP" class="o_address_zip" readonly="type == 'contact' and parent_id"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

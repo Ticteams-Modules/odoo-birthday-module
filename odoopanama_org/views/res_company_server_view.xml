@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+    <record id="view_company_server_cpe" model="ir.ui.view">
+      <field name="name">res.company.server.cpe.inherit</field>
+      <field name="inherit_id" ref="base.view_company_form" />
+      <field name="model">res.company</field>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='logo']" position="before">
+          <widget name="web_ribbon" title="Desarrollo" bg_color="bg-warning o_medium"
+          invisible="type_env" />
+          <widget name="web_ribbon" title="Producción" bg_color="bg-success o_medium"
+          invisible="not type_env" />
+        </xpath>
+        <xpath expr="//notebook" position="inside">
+          <page string="Configuracion DGI - PAC">
+            <group string="Datos de Autenticación">
+              <group>
+                <field name="user" required="type_env"/>
+                <field name="password" password="True" required="type_env"/>
+              </group>
+
+              <group>
+                <field name="type_env" widget="boolean_toggle" />
+                <field name="server_type" required="1" />
+                <field name="l10n_pa_edi_address_type_code" />
+                <field name="pe_is_sync" string="Envío de CPE Sincrónico/Asincrónico"
+                  widget="toggle_button" />
+              </group>
+            </group>
+            <notebook>
+              <page string="URL de Servidor de cpe" name="url">
+                <group name="cpe">
+                  <separator string="Comprobante de Pago" colspan="4" />
+                  <field name="url" placeholder="URL DE WS (Producción) - Es Opcional" />
+                  <field name="url_dev" placeholder="URL DE WS (Desarrollo) - Es Opcional" />
+                </group>
+              </page>
+
+              <page string="Configuración Extra" name="extra_config">
+                <group string="Valores por Defecto">
+                  <field name="default_invoice_email"
+                    placeholder="ej: facturacion@empresa.com" />
+                  <field name="default_corregimiento_id" />
+                  <field name="default_payment_method" />
+                </group>
+              </page>
+            </notebook>
+          </page>
+        </xpath>
+      </field>
+    </record>
+  </data>
+</odoo> 

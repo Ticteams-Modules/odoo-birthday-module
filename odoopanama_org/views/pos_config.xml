@@ -1,0 +1,39 @@
+<odoo>
+    <data>
+
+        <record id="res_config_settings_view_form_fe" model="ir.ui.view">
+	        <field name="name">res.config.settings.view.form.fe</field>
+	        <field name="model">res.config.settings</field>
+	        <field name="inherit_id" ref="point_of_sale.res_config_settings_view_form" />
+	        <field name="arch" type="xml">
+	            <xpath expr="//block[@id='pos_payment_section']" position="before">
+                <block class="row mt16 o_settings_container" title="Electronic invoicing POS - Panama" id="pos_pa_fe">
+	                    <setting id="l10n_pa_edi_send_invoice" string="Activar Emisión de Comprobantes Electrónicos">
+                            <field name="l10n_pa_edi_send_invoice"/>
+                            <setting class="col-lg-12" id="auto_select_journal" string="Seleccionar Diario Automáticamente POS"
+                                    help="Selecciona automáticamente el primer diario disponible."
+                                    invisible="not l10n_pa_edi_send_invoice">
+                                <field name="auto_select_journal"/>
+                            </setting>
+                            <setting class="col-lg-12" id="auto_go_to_payment_on_refund" string="Ir directamente a pago en reembolsos POS"
+                                    help="Navega automáticamente a la pantalla de pago al realizar un reembolso."
+                                    invisible="not l10n_pa_edi_send_invoice">
+                                <field name="auto_go_to_payment_on_refund"/>
+                            </setting>
+                        </setting>
+
+                        <setting id="invoice_journal_ids" string="Diarios de Facturación Contable"  
+                                help="Selecciona los diarios que estarán disponibles al momento de emitir un comprobante en el punto de venta."
+                                invisible="not l10n_pa_edi_send_invoice">
+                                <field name="invoice_journal_ids" widget="many2many_tags" 
+                                    domain="[('company_id', '=', company_id), ('type', '=', 'sale')]"
+                                    required = "l10n_pa_edi_send_invoice"
+                                    context="{'default_company_id': company_id, 'default_type': 'sale'}"
+                                    options="{'no_create': True}"/>
+                        </setting>
+	                </block>
+	            </xpath>
+	        </field>
+	    </record>
+    </data>
+</odoo>

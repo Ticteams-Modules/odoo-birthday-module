@@ -1,0 +1,71 @@
+# -*- coding: utf-8 -*-
+{
+    'name': 'Factura Electrónica Panamá',
+    'version': '2.0',
+    'summary': 'Módulo unificado: RUC, CPE, POS, WebPOS — Panamá (Odoo v18)',
+    'author': 'OdooPanama.org',
+    'license': 'LGPL-3',
+    'category': 'Accounting/Localizations',
+    'depends': [
+        'base',
+        'account',
+        'sale_management',
+        'account_debit_note',
+        'l10n_pa',
+        'l10n_latam_base',
+        'l10n_latam_invoice_document',
+        'base_address_extended',
+        'point_of_sale',
+    ],
+    'data': [
+        # Security
+        'security/security.xml',
+        'security/ir.model.access.csv',
+        # Data
+        'data/res_country_data.xml',
+        'data/l10n_latam_identification_type_data.xml',
+        'data/res.country.state.csv',
+        'data/res.city.csv',
+        'data/l10n_pa.res.city.corregimiento.csv',
+        'data/l10n_latam_document_type_data.xml',
+        'data/res_currency_data.xml',
+        'data/product_data.xml',
+        'data/panama.unspsc.code.csv',
+        'data/cron.xml',
+        'data/template_email_cpe.xml',
+        # Views
+        'views/res_company_view.xml',
+        'views/res_company_server_view.xml',
+        'views/res_partner_view.xml',
+        'views/res_currency_view.xml',
+        'views/account_journal_view.xml',
+        'views/account_tax_view.xml',
+        'views/account_view.xml',
+        'views/account_invoice_debit_view.xml',
+        'views/account_move_view.xml',
+        'views/odoopanama_cpe_view.xml',
+        'views/assets.xml',
+        'views/pos_config.xml',
+        'views/pos_order.xml',
+        # Wizards
+        'wizard/account_invoice_debit_view.xml',
+        'wizard/account_move_annul_view.xml',
+        'wizard/payment_wizard_view.xml',
+        # Reports
+        'report/report_invoice_document.xml',
+        'report/report_invoice_ticket.xml',
+    ],
+    'demo': [
+        'demo/product_demo.xml',
+    ],
+    'post_init_hook': 'post_init_hook',
+    'assets': {
+        'point_of_sale._assets_pos': [
+            'odoopanama_org/static/src/app/**/*.js',
+            'odoopanama_org/static/src/xml/**/*.xml',
+            'odoopanama_org/static/src/css/style.css',
+        ],
+    },
+    'installable': True,
+    'application': True,
+}

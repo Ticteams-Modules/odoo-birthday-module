@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model='l10n_latam.document.type' id='document_type01'>
+        <field name='sequence'>10</field>
+        <field name='code'>01</field>
+        <field name='report_name'>Factura electrónica </field>
+        <field name='name'>Factura de operación interna</field>
+        <field name='country_id' ref='base.pa'/>
+        <field name='doc_code_prefix'>001</field>
+        <field name='internal_type'>invoice</field>
+    </record>
+    <record model='l10n_latam.document.type' id='document_type02'>
+        <field name='sequence'>20</field>
+        <field name='code'>02</field>
+        <field name='report_name'>Factura Importación </field>
+        <field name='name'>Importación</field>
+        <field name='country_id' ref='base.pa'/>
+        <field name='doc_code_prefix'>F-I</field>
+        <field name='internal_type'/>
+    </record>
+    <record model='l10n_latam.document.type' id='document_type03'>
+        <field name='sequence'>30</field>
+        <field name='code'>03</field>
+        <field name='report_name'>Factura de exportación</field>
+        <field name='name'>Exportación</field>
+        <field name='country_id' ref='base.pa'/>
+        <field name='doc_code_prefix'>F</field>
+        <field name='internal_type'>invoice</field>
+    </record>
+    <record model='l10n_latam.document.type' id='document_type04'>
+        <field name='sequence'>40</field>
+        <field name='code'>04</field>
+        <field name='report_name'>Nota de Crédito referente a una FE</field>
+        <field name='name'>Nota de Crédito</field>
+        <field name='country_id' ref='base.pa'/>
+        <field name='doc_code_prefix'>FC</field>
+        <field name='internal_type'>credit_note</field>
+    </record>
+    <record model='l10n_latam.document.type' id='document_type05'>
+        <field name='sequence'>50</field>
+        <field name='code'>05</field>
+        <field name='report_name'>Nota de Débito referente a una FE</field>
+        <field name='name'>Nota de Débito</field>
+        <field name='country_id' ref='base.pa'/>
+        <field name='doc_code_prefix'>FD</field>
+        <field name='internal_type'>debit_note</field>
+    </record>
+    <record model='l10n_latam.document.type' id='document_type06'>
+        <field name='sequence'>60</field>
+        <field name='code'>06</field>
+        <field name='report_name'>Nota de Crédito genérica E</field>
+        <field name='name'>Nota de Crédito genérica</field>
+        <field name='country_id' ref='base.pa'/>
+        <field name='doc_code_prefix'>FC</field>
+        <field name='internal_type'>credit_note</field>
+    </record>
+    <record model='l10n_latam.document.type' id='document_type07'>
+        <field name='sequence'>70</field>
+        <field name='code'>07</field>
+        <field name='report_name'>Nota de Débito genérica</field>
+        <field name='name'>Nota de Débito genérica</field>
+        <field name='country_id' ref='base.pa'/>
+        <field name='doc_code_prefix'>FD</field>
+        <field name='internal_type'>debit_note</field>
+    </record>
+    <record model='l10n_latam.document.type' id='document_type08'>
+        <field name='sequence'>80</field>
+        <field name='code'>08</field>
+        <field name='report_name'>Factura de Zona Franca</field>
+        <field name='name'>Factura de Zona Franca</field>
+        <field name='country_id' ref='base.pa'/>
+        <field name='doc_code_prefix'>F</field>
+        <field name='internal_type'>invoice</field>
+    </record>
+    <record model='l10n_latam.document.type' id='document_type09'>
+        <field name='sequence'>60</field>
+        <field name='code'>20</field>
+        <field name='report_name'>Reembolso</field>
+        <field name='name'>Reembolso</field>
+        <field name='country_id' ref='base.pa'/>
+        <field name='doc_code_prefix'>FC</field>
+        <field name='internal_type'>credit_note</field>
+    </record>
+</odoo> 
+

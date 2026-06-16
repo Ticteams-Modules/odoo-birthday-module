@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+	<data>
+		<!-- explicit list view definition -->
+		<record model="ir.ui.view" id="view_pe_sunat_cpe_list">
+			<field name="name">odoopanama.cpe.list</field>
+			<field name="model">odoopanama.cpe</field>
+			<field name="arch" type="xml">
+				<list>
+					<field name="name" />
+					<field name="type" />
+					<field name="date" />
+					<field name="response" />
+					<field name="error_code" />
+				</list>
+			</field>
+		</record>
+
+		<record id="view_pe_sunat_cpe_from" model="ir.ui.view">
+			<field name="name">odoopanama.cpe.form</field>
+			<field name="model">odoopanama.cpe</field>
+			<field name="arch" type="xml">
+				<form>
+					<header>
+						<button name="action_draft" string="Borrador" invisible="state not in ('generate','cancel')" type="object" groups="odoopanama_org.group_odoopanama_org_cpe_accountant" />
+						<button name="action_generate" string="Generar" invisible="state != 'draft'" type="object" groups="odoopanama_org.group_odoopanama_org_cpe_accountant" />
+						<button name="action_send" string="Enviar" invisible="state != 'generate'" type="object" groups="odoopanama_org.group_odoopanama_org_cpe_accountant" />
+						<button name="action_verify" string="Esperar" invisible="state != 'send'" type="object" groups="odoopanama_org.group_odoopanama_org_cpe_accountant" />
+						<button name="action_document_status" string="Estado del documento" invisible="type in ('rc', 'ra') or state not in ('done', 'generate', 'send', 'verify')" type="object" groups="odoopanama_org.group_odoopanama_org_cpe_accountant" />
+						<button name="action_cancel" string="Cancelar" type="object" invisible="state not in ('draft','generate','send','verify')" groups="odoopanama_org.group_odoopanama_org_cpe_accountant" />
+						<field name="state" widget="statusbar" statusbar_visible="draft,generate,send" />
+					</header>
+					<sheet string="Comprobante de pago electrónico">
+						<h1 class="mt0">
+							<field name="name" readonly="1" class="oe_inline" invisible="state in ('draft', 'generate')" />
+						</h1>
+						<group>
+							<group>
+								<field name="type" readonly="state not in ('draft')" />
+								<field name="error_code" />
+								<field name="response" />
+								<field name="response_code" />
+							</group>
+							<group>
+								<field name="date" readonly="state not in ('draft')" />
+								<field name="send_date" readonly="state not in ('draft')" />
+								<field name="date_end" readonly="state not in ('draft')" />
+								<field name="deadline"/>
+								<field name="ticket" invisible="type not in ('ra', 'rc')" />
+								<field name="company_id" readonly="state not in ('draft')"  options="{'no_create': True}" groups="base.group_multi_company" />
+							</group>
+						</group>
+						<notebook colspan="4">
+							<page string="Detalles del comprobante electrónico">
+								<group>
+									<group>
+										<field name="authorization_protocol" />
+										<field name="cufe" />
+										<field name="dateReceptionDGI" />
+									</group>
+								</group>
+								<div>
+									<!-- <label string="Digest value:" /> -->
+									<field name="digest" placeholder="Digest value..." />
+								</div>
+								<div>
+								</div>
+								<div>
+									<!-- <label string="Additional notes:" /> -->
+								</div>
+								<div>
+									<field name="qrcontent" placeholder="Additional notes..." />
+									<field name="note" placeholder="Additional notes..." />
+								</div>
+							</page>
+							<page string="E-Document">
+								<div>
+									<field name="pa_edocument" placeholder="XML Document..." readonly="state not in ('draft')" />
+								</div>
+							</page>
+							<page string="Facturas" invisible="type not in ('sync')">
+								<field name="invoice_ids" readonly="state not in ('draft')"></field>
+							</page>
+							<page string="Facturas anuladas" invisible="type not in ('ra')">
+								<field name="voided_ids" readonly="state not in ('draft')"></field>
+							</page>							
+						</notebook>
+					</sheet>
+
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="action_pe_cpe">
+			<field name="name">Comprobantes electronicos</field>
+			<field name="res_model">odoopanama.cpe</field>
+			<field name="view_mode">list,form</field>
+		</record>
+
+		<menuitem name="FE-DGI" id="odoopanama_org_cpe_menu_root" sequence="4" web_icon="odoopanama_org,static/description/icon.png" />
+		<menuitem name="Documentos electronicos" id="pa_dgi_document_menu" parent="odoopanama_org_cpe_menu_root" sequence="1" />
+
+		<menuitem name="Comprobantes electronicos" id="pa_dgi_menu" parent="pa_dgi_document_menu" action="action_pe_cpe" sequence="1" />
+
+	</data>
+</odoo> 

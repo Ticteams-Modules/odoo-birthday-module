@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record model='l10n_latam.identification.type' id='l10n_latam_base.it_vat'>
+            <field name='active'>False</field>
+        </record>
+        <record model='l10n_latam.identification.type' id='it_RUCPA'>
+            <field name='name'>Contribuyente</field>
+            <field name='description'>Taxpayer Identification Number</field>
+            <field name='country_id' ref='base.pa'/>
+            <field name='is_vat' eval='True'/>
+            <field name='l10n_pa_vat_code'>01</field>
+            <field name='sequence'>80</field>
+        </record>
+        <record model='l10n_latam.identification.type' id='it_CDL'>
+            <field name='name'>Cedula</field>
+            <field name='description'>National Identity Document</field>
+            <field name='country_id' ref='base.pa'/>
+            <field name='l10n_pa_vat_code'>02</field>
+            <field name='sequence'>81</field>
+        </record>
+        <record model='l10n_latam.identification.type' id='it_GOB'>
+            <field name='name'>Gobierno</field>
+            <field name='description'>Identification number of a Government entity</field>
+            <field name='country_id' ref='base.pa'/>
+            <field name='l10n_pa_vat_code'>03</field>
+            <field name='sequence'>82</field>
+        </record>
+        <record model='l10n_latam.identification.type' id='it_NDTD'>
+            <field name='name'>Extranjero</field>
+            <field name='description'>Document without RUC from another country</field>
+            <field name='country_id' ref='base.pa'/>
+            <field name='l10n_pa_vat_code'>04</field>
+            <field name='sequence'>83</field>
+        </record>
+        <record model='l10n_latam.identification.type' id='l10n_latam_base.it_pass'>
+            <field name='l10n_pa_vat_code'>0401</field>
+            <field name='name'>Pasaporte</field>
+            <field name='sequence'>84</field>
+        </record>
+        <record model='l10n_latam.identification.type' id='it_fid'>
+            <field name='name'>Identificación Tributaria Extranjera</field>
+            <field name='description'>Foreign Tax ID</field>
+            <field name='country_id' ref='base.pa'/>
+            <field name='l10n_pa_vat_code'>0402</field>
+            <field name='sequence'>85</field>
+        </record>
+        <record model='l10n_latam.identification.type' id='it_OTRO'>
+            <field name='name'>Otro</field>
+            <field name='description'>Document without RUC from another country</field>
+            <field name='country_id' ref='base.pa'/>
+            <field name='l10n_pa_vat_code'>99</field>
+            <field name='sequence'>99</field>
+        </record>
+        <record model='l10n_latam.identification.type' id='it_CF'>
+            <field name='name'>Consumidor Final</field>
+            <field name='country_id' ref='base.pa'/>
+            <field name='l10n_pa_vat_code'>07</field>
+            <field name='sequence'>99</field>
+        </record>
+    </data>
+</odoo> 

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Power By: Freddy Hidalgo (redvastago@gmail.com) -->
+    <data noupdate="0">
+        <!--Email template -->
+        <record id="email_template_edi_invoice_cpe2" model="mail.template">
+            <field name="name">Invoice: Send by email cpeCPE</field>
+            <field name="model_id" ref="account.model_account_move" />
+            <!-- <field name="email_from">${(object.invoice_user_id.email_formatted or user.email_formatted) |safe}</field> -->
+            <field name="email_from">{{(object.invoice_user_id.email_formatted or user.email_formatted) }}</field>
+            <field name="partner_to">{{ object.partner_id.id }}</field>
+            <field name="subject">{{ object.company_id.name }} Invoice (Ref {{ object.name or 'n/a' }})</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <h2 style="margin:0px 0 10px 0;font-size: 1.355rem;line-height:1.2;font-weight: 600;text-align:center;color:rgb(112,141,204);text-transform:uppercase;">
+                        <b>
+                            <font class="text-primary">
+                                <span t-field="object.journal_id.l10n_latam_document_type_id.report_name" />
+                                <br />
+                                <!-- <t t-out="object.name"/> -->
+                                <span>Número: </span>
+                                <span t-esc="(object.name).split('-')[-1]" />
+                            </font>
+                        </b>
+                    </h2>
+                    <hr align="left" size="1" width="100%" color="#e8e7e7" />
+                    <p>Señor(es) :  <t t-out="object.partner_id.name or ''"/>,</p>
+                    <br />
+                    <p>Por la presente les comunicamos que la empresa <b><t t-out="object.company_id.name"/></b>, le ha emitido el siguiente comprobante:</p>
+                    <br />
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td style="width:150px;"> Tipo de Comprobante </td>
+                                <td style="width:12px;"> : </td>
+                                <td> <t t-out="object.pa_doc_name"/> </td>
+                            </tr>
+                            <tr>
+                                <td> Número </td>
+                                <td> : </td>
+                                <td> <t t-out="object.name or ''"/> </td>
+                            </tr>
+                            <tr>
+                                <td> Sucursal/Punto </td>
+                                <td> : </td>
+                                <td> <t t-esc="(object.name).split('-')[0]" /></td>
+                            </tr>
+                            <tr>
+                                <td> Razón Social </td>
+                                <td> : </td>
+                                <td> <t t-out="object.partner_id.name"/> </td>
+                            </tr>
+                            <tr>
+                                <td> RUC del cliente </td>
+                                <td> : </td>
+                                <td> <t t-out="object.partner_id.vat"/> </td>
+                            </tr>
+                            <tr>
+                                <td> Fecha de emisión</td>
+                                <td> : </td>
+                                <td> <t t-out="(object.invoice_date.strftime('%d-%m-%Y'))"/></td>
+                                 
+                            </tr>
+                            <t t-if="object.invoice_payment_term_id.name">
+                                <tr>
+                                    <td> Plazos de pago</td>
+                                    <td> : </td>
+                                    <td> <t t-out="object.invoice_payment_term_id.name"/> </td>
+                                </tr>
+                            </t>
+                            <tr>
+                                <td>Fecha de vencimiento</td>
+                                <td> : </td>
+                                <td> <t t-out="object.invoice_date_due.strftime('%d-%m-%Y')"/> </td>
+                            </tr>
+
+                            <tr>
+                                <td> Moneda </td>
+                                <td> : </td>
+                                <td> <t t-out="object.currency_id.plural_name or ''"/> (<t t-out="object.currency_id.name or ''"/>) </td>
+                            </tr>
+                            <tr>
+                                <td> Importe Total </td>
+                                <td> : </td>
+                                <td> <t t-out="'%.2f' % object.amount_total"/> ( <t t-out="object.amount_text"/>)</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <hr/>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td style="width:150px;"> CUFE </td>
+                                <td style="width:12px;"> : </td>
+                                <td> <t t-out="object.pa_edocument_id.cufe"/> </td>
+                            </tr>
+                            <tr>
+                                <td>Nro. De Authorization</td>
+                                <td> : </td>
+                                <td> <t t-out="object.pa_edocument_id.authorization_protocol"/> </td>
+                            </tr>
+                            <tr>
+                                <td>Estado:</td>
+                                <td> : </td>
+                                <td> <t t-out="object.state_dgi"/> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </field>
+
+            <field name="report_name">Invoice_${(object.name or '').replace('/','_')}${object.state == 'draft' and '_draft' or ''}</field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="True" />
+        </record>
+    </data>
+</odoo> 

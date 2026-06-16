@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <!-- Agregar columna de número de factura en la lista de pedidos -->
+    <t t-name="odoopanama_org.TicketScreen" t-inherit="point_of_sale.TicketScreen" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('header-row')]/div[hasclass('col','wide')][2]" position="after">
+            <div class="col wide p-2">Invoice Number</div>
+        </xpath>
+        <xpath expr="//div[hasclass('order-row')]/div[hasclass('col','wide')][2]" position="after">
+            <div class="col p-2">
+                <div t-if="env.isMobile">Invoice Number</div>
+                <div><t t-esc="order.number"/></div>
+            </div>
+        </xpath>
+    </t>
+
+</templates>
