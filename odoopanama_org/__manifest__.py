@@ -29,8 +29,6 @@
         'data/l10n_pa.res.city.corregimiento.csv',
         'data/l10n_latam_document_type_data.xml',
         'data/res_currency_data.xml',
-        'data/product_data.xml',
-        'data/panama.unspsc.code.csv',
         'data/cron.xml',
         'data/template_email_cpe.xml',
         # Views
@@ -44,7 +42,6 @@
         'views/account_invoice_debit_view.xml',
         'views/account_move_view.xml',
         'views/odoopanama_cpe_view.xml',
-        'views/assets.xml',
         'views/pos_config.xml',
         'views/pos_order.xml',
         # Wizards
@@ -55,14 +52,15 @@
         'report/report_invoice_document.xml',
         'report/report_invoice_ticket.xml',
     ],
-    'demo': [
-        'demo/product_demo.xml',
-    ],
+    'demo': [],
     'post_init_hook': 'post_init_hook',
     'assets': {
         'point_of_sale._assets_pos': [
             'odoopanama_org/static/src/app/**/*.js',
             'odoopanama_org/static/src/xml/**/*.xml',
+            'odoopanama_org/static/src/css/style.css',
+        ],
+        'web.assets_backend': [
             'odoopanama_org/static/src/css/style.css',
         ],
     },

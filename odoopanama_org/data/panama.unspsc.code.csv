@@ -54547,7 +54547,6 @@ N96|{"en_US":"Biot"}|uom|True
 N97|{"en_US":"Gilbert"}|uom|True
 N98|{"en_US":"volt per pascal"}|uom|True
 N99|{"en_US":"pv"}|uom|True
-|{"en_US":"milligram per kilogram"}|uom|True
 NAR|{"en_US":"Number of articles"}|uom|True
 NB|{"en_US":"barge"}|uom|True
 NBB|{"en_US":"number of coils"}|uom|True

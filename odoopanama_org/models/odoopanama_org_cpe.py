@@ -58,9 +58,13 @@ class PanamaDgiCpe(models.Model):
     
     @api.model
     def _import_pac_module(self, pac_type):
+        log.error(f"[CPE:_import_pac_module] Importando módulo PAC: {pac_type}")
         try:
-            return import_module(f'...odoopanama_org_{pac_type}.models.cpe_core_{pac_type}', package=__package__)
+            module = import_module(f'.cpe_core_{pac_type}', package=__package__)
+            log.error(f"[CPE:_import_pac_module] Módulo importado OK: {module.__name__}")
+            return module
         except ImportError as e:
+            log.error(f"[CPE:_import_pac_module] ERROR al importar PAC '{pac_type}': {e}", exc_info=True)
             raise UserError(f"No se pudo importar el módulo para el PAC '{pac_type}'. Error: {str(e)}")
         
         
@@ -191,14 +195,23 @@ class PanamaDgiCpe(models.Model):
         return res
 
     def _prepare_cpe(self):
+        log.error(f"[CPE:_prepare_cpe] CPE id={self.id} | name={self.name} | pa_edocument={'OK' if self.pa_edocument else 'VACÍO'}")
         if not self.pa_edocument:
-            self.name = self.get_document_name()
-            pac_module = self._get_current_pac_module()
-            pa_edocument = pac_module.get_document(self)
-            self.pa_edocument = pa_edocument
+            try:
+                self.name = self.get_document_name()
+                log.error(f"[CPE:_prepare_cpe] document_name={self.name}")
+                pac_module = self._get_current_pac_module()
+                log.error(f"[CPE:_prepare_cpe] PAC module={pac_module.__name__}")
+                pa_edocument = pac_module.get_document(self)
+                log.error(f"[CPE:_prepare_cpe] Documento generado OK (len={len(pa_edocument) if pa_edocument else 0})")
+                self.pa_edocument = pa_edocument
+            except Exception as e:
+                log.error(f"[CPE:_prepare_cpe] ERROR: {e}", exc_info=True)
+                raise
 
     def send_cpe(self):
         self.ensure_one()
+        log.error(f"[CPE:send_cpe] Iniciando envío | CPE id={self.id} | name={self.name} | type={self.type}")
 
         if not self.send_date:
             self.send_date = fields.Datetime.now()
@@ -218,10 +231,20 @@ class PanamaDgiCpe(models.Model):
             'xml': self.pa_edocument
         }
         pac_module = self._get_current_pac_module()
-        response = pac_module.send_dgi_cpe(client, document)
+        try:
+            response = pac_module.send_dgi_cpe(client, document)
+        except Exception as e:
+            log.error(f"[CPE:send_cpe] ERROR en send_dgi_cpe: {e}", exc_info=True)
+            raise
+
+        log.error(f"[CPE:send_cpe] Respuesta DGI raw: {response}")
 
         if response:
-            response_dict = json.loads(response)
+            try:
+                response_dict = json.loads(response)
+            except Exception as e:
+                log.error(f"[CPE:send_cpe] ERROR al parsear respuesta JSON: {e} | raw={response}")
+                raise
             self.error_code = response_dict.get("error_code")
             self.response = f"{response_dict.get('msg')}"
             self.qrcontent = response_dict.get("qrContent")
@@ -230,10 +253,12 @@ class PanamaDgiCpe(models.Model):
             self.cufe = response_dict.get("cufe")
             self.deadline = response_dict.get("authDate")
             self.dateReceptionDGI = response_dict.get("authDate")
+            log.error(f"[CPE:send_cpe] resultado={self.response_code} | cufe={self.cufe} | msg={self.response} | error_code={self.error_code}")
 
             new_state = self.get_response_details()
             return new_state or "send"
 
+        log.error(f"[CPE:send_cpe] Respuesta vacía o None del PAC")
         return None   
 
 
@@ -248,8 +273,14 @@ class PanamaDgiCpe(models.Model):
         return state
 
     def generate_cpe(self):
-        self._prepare_cpe()
-        self.state = "generate"
+        log.error(f"[CPE:generate_cpe] Generando CPE id={self.id}")
+        try:
+            self._prepare_cpe()
+            self.state = "generate"
+            log.error(f"[CPE:generate_cpe] CPE generado OK | state={self.state}")
+        except Exception as e:
+            log.error(f"[CPE:generate_cpe] ERROR: {e}", exc_info=True)
+            raise
 
     def action_document_status(self):
         client = self.prepare_pac_auth()

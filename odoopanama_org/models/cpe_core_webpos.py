@@ -171,19 +171,31 @@ class CPE:
         }
 
     def _getDocumentData(self, invoice, invoice_number=False):
+        log.error(f"[CPE:_getDocumentData] invoice.name='{invoice.name}' | invoice_number={invoice_number}")
         doc_parts = invoice.name.split('-')
+        if len(doc_parts) < 2:
+            from odoo.exceptions import UserError
+            log.error(f"[CPE:_getDocumentData] ERROR: nombre sin formato esperado. parts={doc_parts}")
+            raise UserError(
+                f"El número de factura '{invoice.name}' no tiene el formato esperado (TIPO-NUMERO). "
+                f"Verifique que el diario esté configurado con la secuencia de numeración panameña."
+            )
         doc_data = {
-            "posCod": doc_parts[0][-3:], 
+            "posCod": doc_parts[0][-3:],
             "docType": doc_parts[0][:1],
-            "docNumber": doc_parts[1] 
+            "docNumber": doc_parts[1]
         }
+        log.error(f"[CPE:_getDocumentData] doc_data={doc_data}")
         if invoice_number == "credit":
             reversed_entry = invoice.reversed_entry_id
-            doc_data["invoiceNumber"] = reversed_entry.name.split("-")[1]
+            parts = reversed_entry.name.split("-")
+            log.error(f"[CPE:_getDocumentData] credit: reversed_entry={reversed_entry.name} | parts={parts}")
+            doc_data["invoiceNumber"] = parts[1] if len(parts) > 1 else parts[0]
         elif invoice_number == "debit":
             reversed_entry = invoice.debit_origin_id
-            doc_data["invoiceNumber"] = reversed_entry.name.split("-")[1]
-        
+            parts = reversed_entry.name.split("-")
+            log.error(f"[CPE:_getDocumentData] debit: debit_origin={reversed_entry.name} | parts={parts}")
+            doc_data["invoiceNumber"] = parts[1] if len(parts) > 1 else parts[0]
         return doc_data
 
     def _buildFiscalDoc(self, invoice, invoice_number=False):
@@ -397,7 +409,8 @@ class Client(object):
         try:
             return self._call_ws(content_file)
         except Exception as e:
-            return (False, {})
+            log.error(f"[Client:_call_service] ERROR al llamar WS: {e}", exc_info=True)
+            raise
 
     def send_bill(self, content_file):
         return self._call_service(content_file)
@@ -443,16 +456,27 @@ class Client(object):
 
 def get_document(self):
     xml = None
-    if self.type == 'sync':
-        if self.invoice_ids[0].l10n_latam_document_type_id.code == '04' and self.invoice_ids[0].reversed_entry_id:
-            xml = CPE().getCreditNote(self.invoice_ids[0])
-        elif self.invoice_ids[0].l10n_latam_document_type_id.code == '05' and self.invoice_ids[0].debit_origin_id:
-            xml = CPE().getDebitNote(self.invoice_ids[0])
-        else:
-            xml = CPE().getInvoice(self.invoice_ids[0])
-    else:
-        if self.type == 'ra':
+    try:
+        if self.type == 'sync':
+            invoice = self.invoice_ids[0]
+            doc_code = invoice.l10n_latam_document_type_id.code
+            log.error(f"[CPE:get_document] tipo=sync | factura={invoice.name} | doc_code={doc_code}")
+            if doc_code == '04' and invoice.reversed_entry_id:
+                log.error(f"[CPE:get_document] Generando nota de crédito para {invoice.name}")
+                xml = CPE().getCreditNote(invoice)
+            elif doc_code == '05' and invoice.debit_origin_id:
+                log.error(f"[CPE:get_document] Generando nota de débito para {invoice.name}")
+                xml = CPE().getDebitNote(invoice)
+            else:
+                log.error(f"[CPE:get_document] Generando factura para {invoice.name}")
+                xml = CPE().getInvoice(invoice)
+        elif self.type == 'ra':
+            log.error(f"[CPE:get_document] tipo=ra | anulación de {self.voided_ids[0].name if self.voided_ids else 'N/A'}")
             xml = CPE().getVoidedDocuments(self.voided_ids[0])
+        log.error(f"[CPE:get_document] XML generado OK (len={len(xml) if xml else 0})")
+    except Exception as e:
+        log.error(f"[CPE:get_document] ERROR al generar documento: {e}", exc_info=True)
+        raise
     return xml
 
 
@@ -476,12 +500,26 @@ def get_response(data):
 
 
 def send_dgi_cpe(client, document):
-    client['type'] = 'send'
-    client = Client(**client)
-    document['client'] = client
-    return (Document().process)(**document)
+    log.error(f"[send_dgi_cpe] Enviando CPE: document_name={document.get('document_name')} | type={document.get('type')}")
+    try:
+        client['type'] = 'send'
+        client = Client(**client)
+        document['client'] = client
+        result = (Document().process)(**document)
+        log.error(f"[send_dgi_cpe] Respuesta recibida: {result}")
+        return result
+    except Exception as e:
+        log.error(f"[send_dgi_cpe] ERROR al enviar CPE: {e}", exc_info=True)
+        raise
 
 
 def get_pdf_from_webpos(client, cufe):
-    client = Client(**client)
-    return client.get_pdf(cufe)
+    log.error(f"[get_pdf_from_webpos] Solicitando PDF para CUFE={cufe}")
+    try:
+        client = Client(**client)
+        result = client.get_pdf(cufe)
+        log.error(f"[get_pdf_from_webpos] PDF recibido: {'OK' if result else 'VACÍO'}")
+        return result
+    except Exception as e:
+        log.error(f"[get_pdf_from_webpos] ERROR al obtener PDF: {e}", exc_info=True)
+        raise
