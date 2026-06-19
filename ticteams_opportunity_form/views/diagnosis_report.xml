@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ================================================================
+         Report action: Print the Odoo diagnosis as a branded PDF.
+         Bound to crm.lead so it also appears in the Print menu.
+         ================================================================ -->
+    <record id="action_report_diagnosis" model="ir.actions.report">
+        <field name="name">Diagnóstico Odoo</field>
+        <field name="model">crm.lead</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ticteams_opportunity_form.report_diagnosis_document</field>
+        <field name="report_file">ticteams_opportunity_form.report_diagnosis_document</field>
+        <field name="print_report_name">'Diagnostico Odoo - %s' % (object.contact_name or object.name)</field>
+        <field name="binding_model_id" ref="crm.model_crm_lead"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- ================================================================
+         QWeb document template
+         ================================================================ -->
+    <template id="report_diagnosis_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.basic_layout">
+                    <div class="page">
+                        <style>
+                            .tt-diag { font-family: Helvetica, Arial, sans-serif; color: #1f2a2b; }
+                            .tt-diag .tt-head {
+                                background: rgb(12, 118, 121);
+                                color: #ffffff;
+                                padding: 22px 26px;
+                                border-radius: 10px;
+                                margin-bottom: 22px;
+                            }
+                            .tt-diag .tt-brand {
+                                font-size: 13px; letter-spacing: 3px; font-weight: bold;
+                                opacity: 0.9; margin-bottom: 6px;
+                            }
+                            .tt-diag .tt-title { font-size: 22px; font-weight: bold; margin: 0; }
+                            .tt-diag .tt-meta {
+                                width: 100%; margin-bottom: 24px; border-collapse: collapse;
+                                font-size: 12px;
+                            }
+                            .tt-diag .tt-meta td { padding: 4px 8px; vertical-align: top; }
+                            .tt-diag .tt-meta td.lbl {
+                                color: #6b7b7c; font-weight: bold; width: 130px;
+                                text-transform: uppercase; font-size: 10px; letter-spacing: 0.5px;
+                            }
+                            .tt-diag .tt-section { margin-bottom: 18px; }
+                            .tt-diag .tt-section h3 {
+                                font-size: 13px; color: rgb(12, 118, 121);
+                                border-bottom: 2px solid rgb(12, 118, 121);
+                                padding-bottom: 5px; margin: 0 0 8px;
+                                text-transform: uppercase; letter-spacing: 0.5px;
+                            }
+                            .tt-diag table.tt-rows {
+                                width: 100%; border-collapse: collapse; font-size: 12px;
+                            }
+                            .tt-diag table.tt-rows td {
+                                padding: 6px 8px; border-bottom: 1px solid #dfe7e7;
+                                vertical-align: top;
+                            }
+                            .tt-diag table.tt-rows td.k {
+                                width: 45%; color: #6b7b7c; font-weight: bold;
+                            }
+                            .tt-diag .tt-foot {
+                                margin-top: 28px; font-size: 10px; color: #6b7b7c;
+                                text-align: center; border-top: 1px solid #dfe7e7;
+                                padding-top: 10px;
+                            }
+                        </style>
+
+                        <div class="tt-diag">
+                            <div class="tt-head">
+                                <div class="tt-brand">TICTEAMS · IMPLEMENTACIÓN ODOO</div>
+                                <p class="tt-title">Diagnóstico de proyecto Odoo</p>
+                            </div>
+
+                            <table class="tt-meta">
+                                <tr>
+                                    <td class="lbl">Contacto</td>
+                                    <td><span t-field="doc.contact_name"/></td>
+                                    <td class="lbl">Correo</td>
+                                    <td><span t-field="doc.email_from"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="lbl">Empresa</td>
+                                    <td><span t-esc="doc.partner_name or '—'"/></td>
+                                    <td class="lbl">Teléfono</td>
+                                    <td><span t-esc="doc.phone or '—'"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="lbl">País</td>
+                                    <td><span t-esc="doc.x_diag_country or '—'"/></td>
+                                    <td class="lbl">Enviado el</td>
+                                    <td><span t-field="doc.x_diag_submitted_on"/></td>
+                                </tr>
+                            </table>
+
+                            <t t-set="groups" t-value="doc._diag_report_groups()"/>
+                            <t t-if="not groups">
+                                <p>No hay respuestas de diagnóstico registradas.</p>
+                            </t>
+                            <div class="tt-section" t-foreach="groups" t-as="group">
+                                <h3><span t-esc="group['title']"/></h3>
+                                <table class="tt-rows">
+                                    <tr t-foreach="group['rows']" t-as="row">
+                                        <td class="k"><span t-esc="row[0]"/></td>
+                                        <td><span t-esc="row[1]"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="tt-foot">
+                                TICTEAMS · www.ticteams.com · info@ticteams.com
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

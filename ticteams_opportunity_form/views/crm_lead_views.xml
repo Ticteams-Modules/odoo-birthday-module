@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="crm_lead_view_form_diagnosis" model="ir.ui.view">
+        <field name="name">crm.lead.form.diagnosis</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Print button in the form header (only for form-sourced leads) -->
+            <xpath expr="//header" position="inside">
+                <button name="%(action_report_diagnosis)d"
+                        type="action"
+                        string="Imprimir diagnóstico"
+                        class="btn-secondary"
+                        invisible="not x_diag_is_form"/>
+            </xpath>
+
+            <xpath expr="//notebook" position="inside">
+                <page string="Diagnóstico Odoo"
+                      name="odoo_diagnosis"
+                      invisible="not x_diag_is_form">
+                    <group>
+                        <group string="Envío">
+                            <field name="x_diag_is_form" readonly="1"/>
+                            <field name="x_diag_submitted_on" readonly="1"/>
+                            <field name="x_diag_country"/>
+                        </group>
+                        <group string="Perfil">
+                            <field name="x_diag_industry"/>
+                            <field name="x_diag_company_size"/>
+                            <field name="x_diag_multi_currency"/>
+                        </group>
+                    </group>
+
+                    <group string="Gestión actual">
+                        <group>
+                            <field name="x_diag_mgmt_excel"/>
+                            <field name="x_diag_mgmt_basic_accounting"/>
+                            <field name="x_diag_mgmt_disconnected"/>
+                        </group>
+                        <group>
+                            <field name="x_diag_mgmt_existing_erp"/>
+                            <field name="x_diag_mgmt_none"/>
+                        </group>
+                    </group>
+                    <field name="x_diag_migration_notes"
+                           placeholder="Datos a migrar..."/>
+
+                    <group string="Módulos a configurar">
+                        <group>
+                            <field name="x_diag_mod_sales_crm"/>
+                            <field name="x_diag_mod_inventory"/>
+                            <field name="x_diag_mod_purchase"/>
+                            <field name="x_diag_mod_accounting"/>
+                            <field name="x_diag_mod_hr"/>
+                        </group>
+                        <group>
+                            <field name="x_diag_mod_manufacturing"/>
+                            <field name="x_diag_mod_projects"/>
+                            <field name="x_diag_mod_pos"/>
+                            <field name="x_diag_mod_ecommerce"/>
+                            <field name="x_diag_mod_other"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Desarrollo a medida">
+                            <field name="x_diag_custom_modules"/>
+                        </group>
+                        <group string="Contabilidad y facturación electrónica">
+                            <field name="x_diag_accounting_status"/>
+                            <field name="x_diag_einvoice_provider"/>
+                        </group>
+                    </group>
+                    <field name="x_diag_custom_modules_desc"
+                           placeholder="Detalle del desarrollo a medida..."/>
+                    <field name="x_diag_fiscal_docs"
+                           placeholder="Documentos fiscales necesarios..."/>
+
+                    <group>
+                        <group string="Punto de venta">
+                            <field name="x_diag_pos_count"/>
+                            <field name="x_diag_pos_hardware"/>
+                        </group>
+                        <group string="Inventario">
+                            <field name="x_diag_multi_location"/>
+                            <field name="x_diag_sku_range"/>
+                            <field name="x_diag_variants"/>
+                            <field name="x_diag_traceability"/>
+                        </group>
+                    </group>
+
+                    <group string="Integraciones">
+                        <group>
+                            <field name="x_diag_int_shopify"/>
+                            <field name="x_diag_int_woocommerce"/>
+                        </group>
+                        <group>
+                            <field name="x_diag_int_payment_gateway"/>
+                            <field name="x_diag_int_other"/>
+                        </group>
+                    </group>
+                    <field name="x_diag_integration_notes"
+                           placeholder="Detalle / frecuencia de la integración..."/>
+
+                    <group>
+                        <group string="Plazo">
+                            <field name="x_diag_timeline"/>
+                        </group>
+                        <group string="Presupuesto">
+                            <field name="x_diag_budget"/>
+                        </group>
+                    </group>
+
+                    <separator string="Principal problema a resolver"/>
+                    <field name="x_diag_main_problem" nolabel="1"
+                           placeholder="Principal problema..."/>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

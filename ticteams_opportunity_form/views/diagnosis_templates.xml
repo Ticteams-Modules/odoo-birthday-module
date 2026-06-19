@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="diagnosis_page" name="Odoo Diagnosis Form">&lt;!DOCTYPE html&gt;
+        <html lang="es">
+            <head>
+                <meta charset="utf-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+                <meta name="robots" content="noindex, nofollow"/>
+                <title>TicTeams · Diagnóstico de proyecto Odoo</title>
+                <link rel="preconnect" href="https://fonts.googleapis.com"/>
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin"/>
+                <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+                <link rel="stylesheet" type="text/css"
+                      href="/ticteams_opportunity_form/static/src/css/diagnosis_form.css?v=18.0.1.1"/>
+            </head>
+            <body>
+                <div id="diag-root"
+                     t-att-data-name="prefill.get('name')"
+                     t-att-data-email="prefill.get('email')"
+                     t-att-data-phone="prefill.get('phone')"
+                     t-att-data-company="prefill.get('company')">
+                </div>
+                <script type="text/javascript"
+                        src="/ticteams_opportunity_form/static/src/js/diagnosis_form.js?v=18.0.1.1"></script>
+            </body>
+        </html>
+    </template>
+
+</odoo>
